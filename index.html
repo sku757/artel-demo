@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Artel 17/52 — демо</title>
+  <link rel="stylesheet" href="fonts.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="chrome.css" />
+  <link rel="stylesheet" href="overlay.css" />
+</head>
+<body>
+  <!-- Прелоадер -->
+  <div id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__pct" id="pct">0%</div>
+      <div class="preloader__bar"><i id="bar"></i></div>
+    </div>
+  </div>
+
+  <!-- Трек прокрутки + canvas секвенции -->
+  <div class="track" id="track">
+    <canvas id="seq"></canvas>
+  </div>
+
+  <!-- FX-слои: лёгкие затемнения остановок (управляются из JS) -->
+  <div class="fx" aria-hidden="true">
+    <div class="fx__tint fx__tint--1" id="fxTint1"></div>
+    <div class="fx__tint fx__tint--2" id="fxTint2"></div>
+    <div class="fx__tint fx__tint--3" id="fxTint3"></div>
+    <div class="fx__topscrim"></div>
+  </div>
+
+  <!-- ======= ПОСТОЯННАЯ ШАПКА ======= -->
+  <div class="chrome">
+    <header class="top">
+      <div class="top__left">
+        <button class="lang">RU <img src="assets/chev-ru.svg" alt="" /></button>
+        <span class="vdiv"></span>
+        <span class="addr">Санкт-Петербург, Малый проспект, 17-я линия, 52</span>
+      </div>
+
+      <img class="logo" src="assets/logo.svg" alt="Artel 17/52 by W’One Hotels" />
+
+      <div class="top__right">
+        <div class="phone">
+          <a class="phone__num" href="tel:+78122456007">+7 (812) 245-60-07</a>
+          <span class="phone__sub">График работы: Круглосуточно</span>
+        </div>
+        <div class="socials">
+          <a href="#" aria-label="Telegram"><img src="assets/soc-1.svg" alt="" /></a>
+          <a href="#" aria-label="WhatsApp"><img src="assets/soc-2.svg" alt="" /></a>
+        </div>
+        <a class="book" href="#">
+          <span>Забронировать номер</span>
+          <img src="assets/btn-arrow.svg" alt="" />
+        </a>
+      </div>
+    </header>
+
+    <div class="topline"></div>
+
+    <nav class="nav">
+      <a href="#">Об отеле</a>
+      <a href="#">Номера</a>
+      <a href="#">Услуги и сервис</a>
+      <a href="#">Ресторан</a>
+      <a href="#">Галерея</a>
+      <a href="#">Спа</a>
+      <a href="#">Инвесторам</a>
+      <a href="#">Контакты</a>
+    </nav>
+  </div>
+
+  <!-- ======= ОСТАНОВКА 1 ======= -->
+  <div class="stop" id="stop1">
+    <div class="center">
+      <h1 class="title">
+        <span class="serif">Artel 17/52</span> — место,<br />
+        где <span class="serif">искусство</span> встречается<br />
+        с <span class="serif">гостеприимством</span>
+      </h1>
+
+      <form class="booking" action="#">
+        <div class="booking__fields">
+          <div class="field">
+            <span class="field__label">Заезд</span>
+            <span class="field__value">
+              <img class="i16" src="assets/calendar.svg" alt="" />
+              <b>04.07.2026</b>
+              <img class="i18" src="assets/chev-dn.svg" alt="" />
+            </span>
+          </div>
+          <span class="fdiv"></span>
+          <div class="field">
+            <span class="field__label">Выезд</span>
+            <span class="field__value">
+              <img class="i16" src="assets/calendar.svg" alt="" />
+              <b>04.07.2026</b>
+              <img class="i18" src="assets/chev-dn.svg" alt="" />
+            </span>
+          </div>
+          <span class="fdiv"></span>
+          <div class="field">
+            <span class="field__label">Гости</span>
+            <span class="field__value">
+              <img class="i13" src="assets/person.svg" alt="" />
+              <b>2 взрослых, 0 детей</b>
+              <img class="i18" src="assets/chev-dn.svg" alt="" />
+            </span>
+          </div>
+        </div>
+        <button class="booking__submit" type="submit">
+          <img src="assets/search.svg" alt="" />
+          Найти номер
+        </button>
+      </form>
+    </div>
+
+    <div class="scrollhint">
+      <svg viewBox="0 0 14 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0.5" y="0.5" width="13" height="24" rx="6.5" stroke="#FFEEEE" stroke-opacity="0.2"/>
+        <line class="mouse-wheel" x1="7" y1="6" x2="7" y2="9" stroke="#FFEEEE" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Листайте далее</span>
+    </div>
+  </div>
+
+  <!-- ======= ОСТАНОВКА 2 ======= -->
+  <div class="stop" id="stop2">
+    <div class="content2">
+      <h2 class="title">
+        Клубный отель<br />
+        на <span class="serif">Васильевском острове</span>
+      </h2>
+      <p class="lead">
+        В нем <span class="serif">каждая деталь</span> продумана для тех, кто ценит искусство,
+        красоту, комфорт и технологичность в пространстве <span class="serif">вокруг себя</span>
+      </p>
+    </div>
+
+    <div class="scrollhint scrollhint--left">
+      <svg viewBox="0 0 14 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0.5" y="0.5" width="13" height="24" rx="6.5" stroke="#FFEEEE" stroke-opacity="0.2"/>
+        <line class="mouse-wheel" x1="7" y1="6" x2="7" y2="9" stroke="#FFEEEE" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Листайте далее</span>
+    </div>
+  </div>
+
+  <!-- ======= ОСТАНОВКА 3 ======= -->
+  <div class="stop" id="stop3">
+    <h2 class="c9">Cloud 9</h2>
+    <p class="c9sub">Арт-резиденция</p>
+
+    <p class="para para--1">
+      На 9-м этаже нашего отеля расположилось уникальное пространство — единственная
+      в России арт-резиденция при отеле <span class="serif">Cloud9.</span>
+    </p>
+    <p class="para para--2">
+      Именно <span class="serif">Cloud9</span> формирует характер Artel 17/52 —
+      живого творческого пространства, где художники не просто выставляют свои работы,
+      но и живут и создают искусство.
+    </p>
+
+    <a class="more" href="#">
+      <img src="assets/more-btn.svg" alt="" />
+      <span>Подробнее</span>
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

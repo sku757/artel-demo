@@ -1,0 +1,65 @@
+/* ============ Экран 3 «Конец секвенции» — контент ============ */
+/* фон: затемнение и блюр только СЛЕВА (градиентная маска, как в макете),
+   справа здание остаётся резким; верхний скрим .20 */
+:root { --scrim: rgba(0,0,0,.20); }
+.hero__bg img { object-position: center 30%; filter: none; transform: none; }
+.hero__blurmask {
+  position: absolute; inset: 0; z-index: 1;
+  backdrop-filter: blur(7.5px); -webkit-backdrop-filter: blur(7.5px);
+  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, transparent 100%);
+}
+.hero__tint { background: linear-gradient(to left, rgba(0,0,0,0) 0%, rgba(0,0,0,.36) 100%); }
+
+/* ================= контент ================= */
+.content { position: absolute; inset: 0; z-index: 2; }
+
+/* Cloud 9 — 154px, начертание Serif Italic (Regular Italic) */
+/* Cloud 9 прижат к левому краю (не уезжает вправо на широких экранах) */
+.c9 {
+  position: absolute;
+  left: 29px; top: calc(50% - 177px);
+  font-family: var(--serif); font-style: italic; font-weight: 450;
+  font-size: 154px; line-height: 1; letter-spacing: -1.54px;
+  text-align: left; color: var(--cream);
+}
+.c9sub {
+  position: absolute;
+  left: 290px; top: calc(50% - 22px);
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 34px; line-height: 1.08; letter-spacing: -.34px;
+  color: var(--cream); white-space: nowrap;
+}
+
+.para {
+  position: absolute; left: 40px;
+  font-size: 20px; line-height: 1.2; letter-spacing: -.2px;
+  text-align: left; color: var(--cream);
+}
+.para .serif { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.para--1 { top: calc(50% + 151px); width: 400px; }
+.para--2 { top: calc(50% + 237px); width: 551px; }
+
+/* кнопка «Подробнее» */
+.more {
+  position: absolute; left: 40px; top: calc(50% + 359px);   /* 834 при 950 */
+  display: flex; align-items: center; gap: 16px;
+  font-size: 18px; letter-spacing: -.18px;
+  transition: opacity .25s ease;
+}
+.more:hover { opacity: .7; }
+.more img { width: 56px; height: 56px; display: block; }
+
+/* ================= адаптив контента ================= */
+@media (max-width: 1180px) {
+  .c9 { left: 40px; transform: none; width: auto; text-align: left; font-size: clamp(72px, 11vw, 130px); }
+  .c9sub { left: 220px; transform: none; top: calc(50% - 20px); }
+}
+@media (max-width: 820px) {
+  .c9 { top: 26%; }
+  .c9sub { left: 40px; top: calc(26% + 90px); }
+  .para { width: calc(100vw - 80px) !important; font-size: 16px; }
+  .para--1 { top: 48%; }
+  .para--2 { top: auto; bottom: 200px; }
+  .more { top: auto; bottom: 90px; }
+}

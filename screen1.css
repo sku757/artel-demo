@@ -1,0 +1,67 @@
+/* ============ Экран 1 «Первый кадр» — контент ============ */
+/* фон: затемнение .30 → .24, скрим .30 (значения по умолчанию в chrome.css) */
+.hero__bg img { object-position: center 62%; }
+
+/* ================= центр ================= */
+.center {
+  position: absolute; left: 50%; top: calc(50% + 56.5px);
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 64px;
+  width: min(964px, calc(100vw - 48px));
+}
+.title {
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: .98;
+  letter-spacing: -.01em;
+  text-align: center;
+  color: var(--cream);
+}
+.title .serif { font-family: var(--serif); font-style: italic; font-weight: 400; }
+
+/* --- плашка бронирования --- */
+.booking {
+  width: min(900px, 100%);
+  background: var(--cream);
+  border-radius: 100px;
+  padding: 10px 10px 10px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  filter: drop-shadow(0 5px 17.5px rgba(0,0,0,.15));
+  color: var(--green);
+}
+.booking__fields { display: flex; align-items: stretch; gap: 46px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label { font-size: 16px; letter-spacing: -.16px; line-height: 1.2; opacity: .8; }
+.field__value { display: flex; align-items: center; gap: 6px; }
+.field__value b { font-weight: 500; font-size: 16px; letter-spacing: -.16px; line-height: 1.2; white-space: nowrap; }
+.field:last-of-type .field__value { gap: 8px; }
+.i16 { width: 16px; height: 16px; }
+.i18 { width: 18px; height: 18px; }
+.i13 { width: 13px; height: 13px; }
+.fdiv { width: 1px; background: rgba(0,56,34,.15); }
+
+.booking__submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  width: 170px; padding: 18px;
+  border-radius: 100px;
+  background: linear-gradient(180deg, #264739 0%, #1e3b34 100%);
+  color: var(--cream);
+  font-size: 16px; letter-spacing: -.16px; line-height: 1.2; white-space: nowrap;
+  transition: filter .25s ease;
+}
+.booking__submit:hover { filter: brightness(1.12); }
+.booking__submit img { width: 18px; height: 18px; }
+
+/* ================= адаптив контента ================= */
+@media (max-width: 1024px) {
+  .booking__fields { gap: 24px; }
+  .booking { padding-left: 24px; }
+}
+@media (max-width: 820px) {
+  .center { gap: 40px; }
+  .title { font-size: clamp(30px, 7.2vw, 46px); }
+  .booking { flex-direction: column; border-radius: 28px; gap: 18px; padding: 20px; }
+  .booking__fields { width: 100%; justify-content: space-between; gap: 12px; }
+  .fdiv { display: none; }
+  .booking__submit { width: 100%; }
+}

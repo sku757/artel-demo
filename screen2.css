@@ -1,0 +1,43 @@
+/* ============ Экран 2 «Второй кадр» — контент ============ */
+/* фон: затемнение .24 → .36, верхний скрим .50 */
+:root {
+  --tint-from: rgba(0,0,0,.24);
+  --tint-to: rgba(0,0,0,.36);
+  --scrim: rgba(0,0,0,.50);
+}
+.hero__bg img { object-position: center 40%; }
+
+/* ================= контент (слева) ================= */
+.content {
+  position: absolute; left: 40px;
+  top: calc(50% + 89px);
+  width: min(1004px, calc(100vw - 80px));
+}
+.title {
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: .98;
+  letter-spacing: -.01em;
+  color: var(--cream);
+}
+.title .serif, .lead .serif { font-family: var(--serif); font-style: italic; font-weight: 400; }
+
+.lead {
+  margin-top: 28px;             /* от низа заголовка до абзаца (по макету) */
+  width: min(588px, 100%);
+  font-size: 20px;
+  line-height: 1.24;
+  letter-spacing: -.2px;
+  text-align: left;
+  color: var(--cream);
+}
+
+/* ================= адаптив контента ================= */
+@media (max-width: 1024px) {
+  .content { top: auto; bottom: 120px; }
+}
+@media (max-width: 820px) {
+  .title { font-size: clamp(30px, 7.2vw, 46px); }
+  .lead { font-size: 16px; }
+  .content { bottom: 100px; }
+}

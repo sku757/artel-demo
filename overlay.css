@@ -1,0 +1,166 @@
+/* =========================================================
+   Интегрированное демо: FX-слои остановок + контент трёх экранов
+   поверх живой canvas-секвенции. Стили контента — 1:1 из
+   screen1/2/3.css, скоуплены под #stop1/#stop2/#stop3.
+   ========================================================= */
+
+/* ================= FX: затемнения и блюры остановок ================= */
+.fx { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+/* Блюра нет (анимация backdrop-filter даёт артефакты) —
+   только минимальные затемнения, их opacity анимируется гладко */
+.fx__tint { position: absolute; inset: 0; opacity: 0; }
+.fx__tint--1 { background: linear-gradient(180deg, rgba(0,0,0,.22) 0%, rgba(0,0,0,.18) 100%); }
+.fx__tint--2 { background: linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,.26) 100%); }
+.fx__tint--3 { background: linear-gradient(to left, rgba(0,0,0,0) 0%, rgba(0,0,0,.30) 100%); }
+
+/* постоянный скрим за шапкой — на весь экран, сверху тёмный, вниз прозрачный */
+.fx__topscrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.40) 0%, rgba(0,0,0,0) 100%);
+}
+
+/* ================= постоянная шапка ================= */
+.chrome { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+.chrome a, .chrome button { pointer-events: auto; }
+
+/* ================= остановки ================= */
+.stop {
+  position: fixed; inset: 0; z-index: 4;
+  opacity: 0;                                /* управляется из JS */
+  transform: translateY(var(--ty, 14px));
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+/* интерактив включается только когда остановка видима */
+.stop.is-active a, .stop.is-active button { pointer-events: auto; }
+
+/* ---------- СТОП 1: заголовок + бронирование (из screen1.css) ---------- */
+#stop1 .center {
+  position: absolute; left: 50%; top: calc(50% + 56.5px);
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 64px;
+  width: min(964px, calc(100vw - 48px));
+}
+#stop1 .title {
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: .98;
+  letter-spacing: -.01em;
+  text-align: center;
+  color: var(--cream);
+}
+.stop .serif { font-family: var(--serif); font-style: italic; font-weight: 400; }
+
+#stop1 .booking {
+  width: min(900px, 100%);
+  background: var(--cream);
+  border-radius: 100px;
+  padding: 10px 10px 10px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  filter: drop-shadow(0 5px 17.5px rgba(0,0,0,.15));
+  color: var(--green);
+}
+#stop1 .booking__fields { display: flex; align-items: stretch; gap: 46px; }
+#stop1 .field { display: flex; flex-direction: column; gap: 8px; }
+#stop1 .field__label { font-size: 16px; letter-spacing: -.16px; line-height: 1.2; opacity: .8; }
+#stop1 .field__value { display: flex; align-items: center; gap: 6px; }
+#stop1 .field__value b { font-weight: 500; font-size: 16px; letter-spacing: -.16px; line-height: 1.2; white-space: nowrap; }
+#stop1 .field:last-of-type .field__value { gap: 8px; }
+#stop1 .i16 { width: 16px; height: 16px; }
+#stop1 .i18 { width: 18px; height: 18px; }
+#stop1 .i13 { width: 13px; height: 13px; }
+#stop1 .fdiv { width: 1px; background: rgba(0,56,34,.15); }
+#stop1 .booking__submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  width: 170px; padding: 18px;
+  border-radius: 100px;
+  background: linear-gradient(180deg, #264739 0%, #1e3b34 100%);
+  color: var(--cream);
+  font-size: 16px; letter-spacing: -.16px; line-height: 1.2; white-space: nowrap;
+  transition: filter .25s ease;
+}
+#stop1 .booking__submit:hover { filter: brightness(1.12); }
+#stop1 .booking__submit img { width: 18px; height: 18px; }
+
+/* ---------- СТОП 2: «Клубный отель» (из screen2.css) ---------- */
+#stop2 .content2 {
+  position: absolute; left: 40px;
+  top: calc(50% + 89px);
+  width: min(1004px, calc(100vw - 80px));
+}
+#stop2 .title {
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: .98;
+  letter-spacing: -.01em;
+  color: var(--cream);
+}
+#stop2 .lead {
+  margin-top: 28px;
+  width: min(588px, 100%);
+  font-size: 20px;
+  line-height: 1.24;
+  letter-spacing: -.2px;
+  text-align: left;
+  color: var(--cream);
+}
+
+/* ---------- СТОП 3: «Cloud 9» (из screen3.css) ---------- */
+/* Cloud 9 прижат к левому краю (не уезжает вправо на широких экранах) */
+#stop3 .c9 {
+  position: absolute;
+  left: 29px; top: calc(50% - 177px);
+  font-family: var(--serif); font-style: italic; font-weight: 450;
+  font-size: 154px; line-height: 1; letter-spacing: -1.54px;
+  text-align: left; color: var(--cream);
+}
+#stop3 .c9sub {
+  position: absolute;
+  left: 290px; top: calc(50% - 22px);
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 34px; line-height: 1.08; letter-spacing: -.34px;
+  color: var(--cream); white-space: nowrap;
+}
+#stop3 .para {
+  position: absolute; left: 40px;
+  font-size: 20px; line-height: 1.2; letter-spacing: -.2px;
+  text-align: left; color: var(--cream);
+}
+#stop3 .para--1 { top: calc(50% + 151px); width: 400px; }
+#stop3 .para--2 { top: calc(50% + 237px); width: 551px; }
+#stop3 .more {
+  position: absolute; left: 40px; top: calc(50% + 359px);
+  display: flex; align-items: center; gap: 16px;
+  font-size: 18px; letter-spacing: -.18px;
+  transition: opacity .25s ease;
+}
+#stop3 .more:hover { opacity: .7; }
+#stop3 .more img { width: 56px; height: 56px; display: block; }
+
+/* ================= адаптив контента остановок ================= */
+@media (max-width: 1180px) {
+  #stop3 .c9 { left: 40px; transform: none; width: auto; text-align: left; font-size: clamp(72px, 11vw, 130px); }
+  #stop3 .c9sub { left: 220px; transform: none; top: calc(50% - 20px); }
+}
+@media (max-width: 1024px) {
+  #stop1 .booking__fields { gap: 24px; }
+  #stop1 .booking { padding-left: 24px; }
+  #stop2 .content2 { top: auto; bottom: 120px; }
+}
+@media (max-width: 820px) {
+  #stop1 .center { gap: 40px; }
+  #stop1 .title, #stop2 .title { font-size: clamp(30px, 7.2vw, 46px); }
+  #stop1 .booking { flex-direction: column; border-radius: 28px; gap: 18px; padding: 20px; }
+  #stop1 .booking__fields { width: 100%; justify-content: space-between; gap: 12px; }
+  #stop1 .fdiv { display: none; }
+  #stop1 .booking__submit { width: 100%; }
+  #stop2 .lead { font-size: 16px; }
+  #stop2 .content2 { bottom: 100px; }
+  #stop3 .c9 { top: 26%; }
+  #stop3 .c9sub { left: 40px; top: calc(26% + 90px); }
+  #stop3 .para { width: calc(100vw - 80px) !important; font-size: 16px; }
+  #stop3 .para--1 { top: 48%; }
+  #stop3 .para--2 { top: auto; bottom: 200px; }
+  #stop3 .more { top: auto; bottom: 90px; }
+}

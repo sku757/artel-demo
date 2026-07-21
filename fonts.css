@@ -1,0 +1,27 @@
+/* Лицензионные шрифты макета — TT Norms Pro (+ Serif) */
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("assets/fonts/TTNormsPro-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("assets/fonts/TTNormsPro-Medium.ttf") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro Serif";
+  src: url("assets/fonts/TT_Norms_Pro_Serif_Trial_Normal.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro Serif";
+  src: url("assets/fonts/TT_Norms_Pro_Serif_Trial_Normal_Italic.ttf") format("truetype");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  /* начертание Italic (Regular Italic) — используется для «Cloud 9» */
+  font-family: "TT Norms Pro Serif";
+  src: url("assets/fonts/TT_Norms_Pro_Serif_Trial_Italic.ttf") format("truetype");
+  font-weight: 450; font-style: italic; font-display: swap;
+}
