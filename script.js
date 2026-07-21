@@ -70,8 +70,6 @@ var canvas = document.getElementById("seq");
 var ctx = canvas.getContext("2d");
 var track = document.getElementById("track");
 var preloader = document.getElementById("preloader");
-var pctEl = document.getElementById("pct");
-var barEl = document.getElementById("bar");
 /* FX-слои остановок (только лёгкие затемнения — блюр убран:
    анимация backdrop-filter мерцает в Chrome, а затемнение через
    opacity обычного div идеально гладкое) */
@@ -346,11 +344,7 @@ function boot() {
   }
 
   preloadBlobs(
-    function (p) {
-      var pct = Math.round(p * 100);
-      pctEl.textContent = pct + "%";
-      barEl.style.width = pct + "%";
-    },
+    function () { /* спиннер — прогресс не отображаем */ },
     function () {
       /* декодируем стартовое окно, затем открываем сцену */
       decodePump(0);
