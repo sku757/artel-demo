@@ -30,13 +30,14 @@ function framePath(i) {
 var KA = 191;               // середина
 var KB = FRAME_COUNT - 1;   // крыша
 
-/* Таймлайн: веса = доли длины скролла */
+/* Таймлайн: веса = доли пути. Hold-зоны короткие — ровно на фейд текста,
+   чтобы перелёт начинался почти сразу после жеста (без «мёртвой» паузы). */
 var SEG = [
-  { type: "hold", frame: 0,         w: 0.4 },
+  { type: "hold", frame: 0,         w: 0.2 },
   { type: "move", from: 0,  to: KA, w: 2.6 },
-  { type: "hold", frame: KA,        w: 1.0 },
+  { type: "hold", frame: KA,        w: 0.45 },
   { type: "move", from: KA, to: KB, w: 2.6 },
-  { type: "hold", frame: KB,        w: 1.0 }
+  { type: "hold", frame: KB,        w: 0.45 }
 ];
 (function () {
   var total = 0, acc = 0, i;
