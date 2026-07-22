@@ -38,7 +38,7 @@
 }
 .para .serif { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .para--1 { top: calc(50% + 151px); width: 400px; }
-.para--2 { top: calc(50% + 237px); width: 551px; }
+.para--2 { top: calc(50% + 237px); width: 440px; }
 
 /* кнопка «Подробнее» */
 .more {

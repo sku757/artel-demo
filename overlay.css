@@ -128,7 +128,7 @@
   text-align: left; color: var(--cream);
 }
 #stop3 .para--1 { top: calc(50% + 151px); width: 400px; }
-#stop3 .para--2 { top: calc(50% + 237px); width: 551px; }
+#stop3 .para--2 { top: calc(50% + 237px); width: 440px; }
 #stop3 .more {
   position: absolute; left: 40px; top: calc(50% + 359px);
   display: flex; align-items: center; gap: 16px;
@@ -160,6 +160,7 @@
   #stop3 .c9 { top: 26%; }
   #stop3 .c9sub { left: 40px; top: calc(26% + 90px); }
   #stop3 .para { width: calc(100vw - 80px) !important; font-size: 16px; }
+  #stop3 .para br { display: none; }   /* ручной перенос — только на десктопе */
   #stop3 .para--1 { top: 48%; }
   #stop3 .para--2 { top: auto; bottom: 200px; }
   #stop3 .more { top: auto; bottom: 90px; }
