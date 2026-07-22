@@ -260,8 +260,8 @@ function updateOverlays(p) {
    пользователь всегда оказывается там, где есть текст.
    ========================================================================= */
 var STOPS = [0, (_hA.p0 + _hA.p1) / 2, 1];   /* прогресс трёх остановок */
-var ANIM_MS = 3600;          /* длительность перелёта между остановками */
-var GESTURE_PX = 60;         /* сколько «прокрутки» запускает перелёт */
+var ANIM_MS = 2400;          /* длительность перелёта между остановками */
+var GESTURE_PX = 30;         /* сколько «прокрутки» запускает перелёт */
 var COOLDOWN_MS = 450;       /* игнор инерционного хвоста трекпада после перелёта */
 
 var stopIndex = 0;
@@ -326,8 +326,8 @@ function onTouchMove(e) {
   e.preventDefault();
   if (touchY == null || touchUsed || animating || performance.now() < cooldownUntil) return;
   var dy = touchY - e.touches[0].clientY;
-  if (dy > 40)       { touchUsed = true; goTo(stopIndex + 1); }
-  else if (dy < -40) { touchUsed = true; goTo(stopIndex - 1); }
+  if (dy > 24)       { touchUsed = true; goTo(stopIndex + 1); }
+  else if (dy < -24) { touchUsed = true; goTo(stopIndex - 1); }
 }
 
 function onKey(e) {
