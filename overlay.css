@@ -127,8 +127,8 @@
   font-size: 20px; line-height: 1.2; letter-spacing: -.2px;
   text-align: left; color: var(--cream);
 }
-#stop3 .para--1 { top: calc(50% + 151px); width: 400px; }
-#stop3 .para--2 { top: calc(50% + 237px); width: 440px; }
+#stop3 .para--1 { top: calc(50% + 127px); width: 400px; }
+#stop3 .para--2 { top: calc(50% + 213px); width: 440px; }
 #stop3 .more {
   position: absolute; left: 40px; top: calc(50% + 359px);
   display: flex; align-items: center; gap: 16px;
