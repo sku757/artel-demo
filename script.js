@@ -7,8 +7,8 @@
       (createImageBitmap из Blob не блокирует главный поток) — отрисовка
       никогда не ждёт декодирования: нет рывков.
    3. Дробный плейхед + блендинг соседних кадров = непрерывное движение.
-   4. Одна ступень сглаживания скролла (Lenis). Кадр стоит там, где
-      остановился скролл.
+   4. Snap-навигация: свободного скролла нет, жест = плавный перелёт
+      к соседней остановке с фиксированным темпом.
    5. Таймлайн: hold – move – hold – move – hold. В hold кадр стоит,
       в move едет с easeInOutSine (плавный разгон и плавное торможение).
    ========================================================================= */
@@ -254,30 +254,46 @@ function updateOverlays(p) {
 }
 
 /* =========================================================================
-   ГЛАВНЫЙ ЦИКЛ
+   НАВИГАЦИЯ ПО ОСТАНОВКАМ (snap)
+   Свободного скролла нет: любой жест (колесо / свайп / клавиши) запускает
+   плавный перелёт к соседней остановке. Остановиться между точками нельзя —
+   пользователь всегда оказывается там, где есть текст.
    ========================================================================= */
-function scrollProgress(scrollY) {
-  var scrollable = track.offsetHeight - window.innerHeight;
-  var p = scrollable > 0 ? scrollY / scrollable : 0;
-  return p < 0 ? 0 : (p > 1 ? 1 : p);
+var STOPS = [0, (_hA.p0 + _hA.p1) / 2, 1];   /* прогресс трёх остановок */
+var ANIM_MS = 3600;          /* длительность перелёта между остановками */
+var GESTURE_PX = 60;         /* сколько «прокрутки» запускает перелёт */
+var COOLDOWN_MS = 450;       /* игнор инерционного хвоста трекпада после перелёта */
+
+var stopIndex = 0;
+var animating = false;
+var animFrom = 0, animTo = 0, animStart = 0;
+var cooldownUntil = 0;
+var wheelAccum = 0;
+
+function goTo(idx) {
+  if (animating) return;
+  if (idx < 0) idx = 0;
+  if (idx > STOPS.length - 1) idx = STOPS.length - 1;
+  if (idx === stopIndex) return;
+  animating = true;
+  animFrom = STOPS[stopIndex];
+  animTo = STOPS[idx];
+  stopIndex = idx;
+  animStart = performance.now();
 }
 
-/* Демпфированный плейхед: единый плавный темп при любой силе скролла.
-   EASE — мягкость подъезда к цели (даёт плавное торможение у остановок),
-   MAX_STEP — потолок скорости: даже резкий флик проигрывается ровно,
-   без «врезания» в остановку и без видимого перебора кадров. */
-var EASE = 0.085;
-var MAX_STEP = 0.0035;   /* ≈4.8 c на полный прогон при жёстком флике */
-
-function tick() {
-  var scrollY = window.__lenis ? window.__lenis.scroll : window.scrollY;
-  var target = scrollProgress(scrollY);
-
-  var step = (target - renderedProgress) * EASE;
-  if (step >  MAX_STEP) step =  MAX_STEP;
-  if (step < -MAX_STEP) step = -MAX_STEP;
-  renderedProgress += step;
-  if (Math.abs(target - renderedProgress) < 0.0002) renderedProgress = target;
+function tick(now) {
+  if (animating) {
+    var t = (now - animStart) / ANIM_MS;
+    if (t >= 1) {
+      t = 1; animating = false;
+      cooldownUntil = now + COOLDOWN_MS;   /* гасим инерцию жеста */
+      wheelAccum = 0;
+    }
+    /* время линейное: разгон и торможение даёт easeInOutSine внутри таймлайна,
+       а плоские hold-зоны по краям — паузы на появление/уход текста */
+    renderedProgress = animFrom + (animTo - animFrom) * t;
+  }
 
   var p = renderedProgress;
 
@@ -294,35 +310,43 @@ function tick() {
   }
 }
 
+/* ---------------- жесты ---------------- */
+function onWheel(e) {
+  e.preventDefault();
+  var now = performance.now();
+  if (animating || now < cooldownUntil) return;
+  wheelAccum += e.deltaY;
+  if (wheelAccum > GESTURE_PX)       { wheelAccum = 0; goTo(stopIndex + 1); }
+  else if (wheelAccum < -GESTURE_PX) { wheelAccum = 0; goTo(stopIndex - 1); }
+}
+
+var touchY = null, touchUsed = false;
+function onTouchStart(e) { touchY = e.touches[0].clientY; touchUsed = false; }
+function onTouchMove(e) {
+  e.preventDefault();
+  if (touchY == null || touchUsed || animating || performance.now() < cooldownUntil) return;
+  var dy = touchY - e.touches[0].clientY;
+  if (dy > 40)       { touchUsed = true; goTo(stopIndex + 1); }
+  else if (dy < -40) { touchUsed = true; goTo(stopIndex - 1); }
+}
+
+function onKey(e) {
+  if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(stopIndex + 1); }
+  else if (e.key === "ArrowUp" || e.key === "PageUp")                 { e.preventDefault(); goTo(stopIndex - 1); }
+}
+
 /* =========================================================================
    СТАРТ
    ========================================================================= */
 function startLoop() {
-  if (window.Lenis) {
-    var lenis = new Lenis({
-      lerp: 0.09,           /* сглаживание скролла; поверх него — демпфер плейхеда */
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.4
-    });
-    window.__lenis = lenis;
-    (function raf(time) {
-      lenis.raf(time);
-      tick();
-      requestAnimationFrame(raf);
-    })(0);
-  } else {
-    /* fallback: нативный скролл + лёгкий lerp свой */
-    var sp = 0;
-    (function loop() {
-      var target = window.scrollY;
-      sp += (target - sp) * 0.2;
-      if (Math.abs(target - sp) < 0.5) sp = target;
-      window.__fallbackScroll = sp;
-      tick();
-      requestAnimationFrame(loop);
-    })();
-  }
+  window.addEventListener("wheel", onWheel, { passive: false });
+  window.addEventListener("touchstart", onTouchStart, { passive: true });
+  window.addEventListener("touchmove", onTouchMove, { passive: false });
+  window.addEventListener("keydown", onKey);
+  (function raf(now) {
+    tick(now || performance.now());
+    requestAnimationFrame(raf);
+  })(performance.now());
 }
 
 function boot() {

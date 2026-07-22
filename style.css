@@ -11,9 +11,12 @@ html { scrollbar-width: none; -ms-overflow-style: none; }
 html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 /* ============ трек + canvas ============ */
+/* Snap-режим: страница не скроллится, навигация только жестами по остановкам */
+body { overflow: hidden; }
 .track {
   position: relative;
-  height: 1250vh;  /* длина прокрутки: один свайп покрывает меньше пути */
+  height: 100vh;
+  height: 100svh;
 }
 #seq {
   position: sticky;
